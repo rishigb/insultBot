@@ -2,8 +2,7 @@ import tweepy
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-import xlrd
-import xlwt
+import os
 
 consumer_key = "nZNaBHqEUFIVNeFBUUjFQWa3c"
 consumer_secret= "ltjmhAUnl6xbQa8ZzSW7XkM0heciSoO5YDMoGVjfpaw6nPoENe"
@@ -11,7 +10,10 @@ access_token = "124088888-9bFnLQjsZTeGyKiZqYHyQ05ZsJkG9eaD4CywRd08"
 access_token_secret = "FXmtMaItnfXvFx5ybO8L6SIwO95TV58dhLmnTxAy01LfN"
 
 
-fo = open("dataRevAll.csv", "wb")
+fo = open("dataRevAll.txt", "w")
+
+#print(type("Name"+"|"+"Tweet"+"|"+"PersonDescription"+"|"+"Following"+"|"+"Followers"+"|"+"statusCount"+"|"+"retweet_count"+"|"+"verified"+"|"+"LocationOfOriginOfTweet"+"|"+"lang"))
+
 fo.write(str("Name"+"|"+"Tweet"+"|"+"PersonDescription"+"|"+"Following"+"|"+"Followers"+"|"+"statusCount"+"|"+"retweet_count"+"|"+"verified"+"|"+"LocationOfOriginOfTweet"+"|"+"lang")+ str(os.linesep))
 '''
 status.user.screen_name
@@ -38,30 +40,24 @@ class listener(StreamListener):
     
     ''' On status worked better than on_data. The json format can be directly used here '''
    
-        def on_status(self, status):
-            try:
-                tweet = status.user.screen_name+ status.text
-                print (tweet)
-                fo.write(status.user.screen_name)
-                opSheet.write(j,1,status.text)
-                opSheet.write(j,2,status.user.description)
-                opSheet.write(j,3,status.user.friends_count)
-                opSheet.write(j,4,status.user.followers_count)
-                opSheet.write(j,5,status.user.statuses_count)
-                opSheet.write(j,6,status.retweet_count)
-                opSheet.write(j,7,status.user.verified)
-                opSheet.write(j,8,status.user.location)
-                opSheet.write(j,9,status.lang)
-                
-                
+    def on_status(self, status):
+        try:
+            tweet = status.user.screen_name+ status.text
+            print (tweet)
+            #print(type("string"))
+            ''' Below if else is required since location object is not always present '''
+            if (type(status.user.location) == type("string")):
+                print ("True")
+                fo.write(str(status.user.screen_name)+"|"+str(status.text)+"|"+str(status.user.description)+"|"+str(status.user.friends_count)+"|"+str(status.user.followers_count)+"|"+str(status.retweet_count)+"|"+str(status.user.verified)+"|"+str(status.user.location)+"|"+str(status.lang)+ str(os.linesep))
+            else:
+                print ("False")
+                fo.write(str(status.user.screen_name)+"|"+str(status.text)+"|"+str(status.user.description)+"|"+str(status.user.friends_count)+"|"+str(status.user.followers_count)+"|"+str(status.retweet_count)+"|"+str(status.user.verified)+"|"+str("none")+"|"+str(status.lang)+ str(os.linesep))
+     
 
-
-
-
-            except : #Called on any exception
-                fw.save("TargetApparelFriday"+".xls")
-                print ('failed on data'),str(e)
-                #time.sleep(2)
+        except : #Called on any exception
+            
+            print ('failed on data'),str(e)
+            #time.sleep(2)
     on_event = on_status
 
     def on_error(self, status):
