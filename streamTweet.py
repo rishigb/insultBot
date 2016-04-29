@@ -4,10 +4,7 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 import os
 
-consumer_key = "nZNaBHqEUFIVNeFBUUjFQWa3c"
-consumer_secret= "ltjmhAUnl6xbQa8ZzSW7XkM0heciSoO5YDMoGVjfpaw6nPoENe"
-access_token = "124088888-9bFnLQjsZTeGyKiZqYHyQ05ZsJkG9eaD4CywRd08"
-access_token_secret = "FXmtMaItnfXvFx5ybO8L6SIwO95TV58dhLmnTxAy01LfN"
+
 
 
 fo = open("dataRevAll.txt", "w")
